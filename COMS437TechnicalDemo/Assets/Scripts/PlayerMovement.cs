@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private float dirX = 0f;
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpForce = 7f;
+    private bool jumpable;
 
     private enum MovementState {idle, running, jumping, falling};
 
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         collider = GetComponent<BoxCollider2D>();
+        jumpable = true;
         //sprite = GetComponent<SpriteRenderer>();
         //anim = GetComponent<Animator>();
     }
@@ -35,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
         dirX = Input.GetAxisRaw("Horizontal"); //raw to make it stop as soon as you release the button, only need this in Update
         rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y); //rb.velocity,y is the value the y velocity had the frame before, to not drop it to zero
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        if (Input.GetButtonDown("Jump") && IsGrounded() && jumpable)
         {
             //jumpSoundEffect.Play();
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -79,7 +81,13 @@ public class PlayerMovement : MonoBehaviour
 
     private bool IsGrounded()
     {
+        Debug.Log(Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0f, Vector2.down, .1f, jumpableGround).ToString());
         return Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
+    }
+
+    public void setJumpable(bool jumpable)
+    {
+        this.jumpable = jumpable;
     }
 
 }
