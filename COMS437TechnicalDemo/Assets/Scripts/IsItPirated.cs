@@ -26,8 +26,7 @@ public class IsItPirated : MonoBehaviour
         else
             text.SetText("Host: N/A");
 
-        if (Application.isEditor)
-            ValidateURL();
+        ValidateURL();
     }
 
     void Update()
@@ -40,7 +39,7 @@ public class IsItPirated : MonoBehaviour
 
     private void ValidateURL()
     {
-        if (Application.isEditor || (!IsValidURL(allowedHosts) && Application.absoluteURL.Length > 0))
+        if (!IsValidURL(allowedHosts) && Application.absoluteURL.Length > 0)
         {
             playerMovement.setJumpable(false);
             GameObject.FindWithTag("TrueTerrain").SetActive(false);
