@@ -13,10 +13,10 @@ public class IsItPirated : MonoBehaviour
 
     private string[] allowedHosts =
     {
-        "itch.io",
-        "itch.zone",
-        //http://"localhost",
-        //https://"localhost",
+        //"itch.io",
+        //"itch.zone",
+        "http://localhost",
+        "https://localhost",
     };
 
     void Start()
