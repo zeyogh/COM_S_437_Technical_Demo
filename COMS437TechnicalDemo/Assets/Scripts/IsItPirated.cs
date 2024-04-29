@@ -8,33 +8,44 @@ public class IsItPirated : MonoBehaviour
 {
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] TextMeshProUGUI text;
+    [SerializeField] GameObject brokenTerrain1;
+    [SerializeField] GameObject brokenTerrain2;
 
     private string[] allowedHosts =
     {
         "itch.io",
         "itch.zone",
-        "file://",
-        "localhost",
+        //http://"localhost",
+        //https://"localhost",
     };
 
-    private void Start()
+    void Start()
     {
         if (Application.absoluteURL.Length > 0)
-            text.SetText(Application.absoluteURL);
+            text.SetText("Host: " + Application.absoluteURL);
         else
-            text.SetText("Nothing to see here...");
-        if (!Application.isEditor)
+            text.SetText("Host: N/A");
+
+        if (Application.isEditor)
             ValidateURL();
+    }
+
+    void Update()
+    {
+        if (GameObject.FindWithTag("Player").transform.position.y < -100)
+        {
+            SceneManager.LoadScene(3);
+        }
     }
 
     private void ValidateURL()
     {
-        if (!IsValidURL(allowedHosts) && Application.absoluteURL.Length > 0)
+        if (Application.isEditor || (!IsValidURL(allowedHosts) && Application.absoluteURL.Length > 0))
         {
             playerMovement.setJumpable(false);
             GameObject.FindWithTag("TrueTerrain").SetActive(false);
-            GameObject.FindWithTag("BrokenTerrain1").SetActive(true);
-            GameObject.FindWithTag("BrokenTerrain2").SetActive(true);
+            brokenTerrain1.SetActive(true);
+            brokenTerrain2.SetActive(true);
         }
     }
 
